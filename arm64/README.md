@@ -94,7 +94,7 @@ read from. If Everest's download location changes, `-l` will fail first.
 - **Cloud saves.** Celeste uses Steam's file-based Auto-Cloud. The native build keeps its saves
   in `~/.local/share/Celeste/Saves`, what I do is set the launch options of Celeste in steam(ran with default compatibility tools) to run my version via play.sh, and Steam backs up as usual:
   ```bash
-  /path/to/repo/play.sh %command%
+  /path/to/game/dir/play.sh %command%
   ```
 - **The in-game Everest updater** cannot finish on aarch64 (it runs an x86-64 installer), so use
   `arm64/update-everest.sh`. Mod updates are not affected.
