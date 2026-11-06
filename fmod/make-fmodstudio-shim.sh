@@ -55,5 +55,15 @@ sed -i \
     -e 's/FMOD_Studio_EventInstance_KeyOff/FMOD_Studio_EventInstance_TriggerCue/g' \
     libfmodstudio.so.13.tramp.S
 
+# Celeste fix: FMOD 2 never finishes a fade-out stop for some music events (B-side remixes,
+# cassette tracks, ...). reaper.c defines these four functions itself and uses the renamed
+# trampolines below to talk to the real library.
+for fn in FMOD_Studio_EventInstance_Stop FMOD_Studio_EventInstance_Release \
+          FMOD_Studio_EventInstance_Start FMOD_Studio_System_Update; do
+    sed -i "s/\\b${fn}\\b/shim_real_${fn}/g" libfmodstudio.so.13.tramp.S
+    grep -q "shim_real_${fn}" libfmodstudio.so.13.tramp.S \
+        || { echo "ERROR: ${fn} not found in the generated assembly" >&2; exit 1; }
+done
+
 gcc -o ../sound/libfmodstudio.so -shared -fPIC -DIMPLIB_EXPORT_SHIMS \
-    libfmodstudio.so.13.init.c libfmodstudio.so.13.tramp.S -ldl -pthread
+    libfmodstudio.so.13.init.c libfmodstudio.so.13.tramp.S ../reaper.c -ldl -pthread -lm

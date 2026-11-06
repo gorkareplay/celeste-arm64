@@ -20,3 +20,9 @@
 !.github/
 !.github/workflows/
 !.github/workflows/build.yaml
+!arm64/
+!arm64/*.sh
+!arm64/shell.nix
+!arm64/README.md
+!arm64/tools/
+!arm64/tools/*.c

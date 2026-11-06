@@ -1,3 +1,6 @@
+This fork targets aarch64 Linux (Built on nixos-apple-silicon). It adds a music fix(it wasn't stopped properly for b and c sides),
+Steam and Everest workarounds and an installer. See [arm64/README.md](arm64/README.md).
+
 # Celeste FMOD2 Utilities
 
 This repository contains utilities for getting Celeste to work with FMOD 2 on ARM64 and x86_64 Linux. These utilities were tested on a Nintendo Switch running Ubuntu Noble 24.04.

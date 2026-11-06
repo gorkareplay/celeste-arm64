@@ -4,7 +4,7 @@ clean:
 nosound: nosound/libfmod.so.10 nosound/libfmodstudio.so.10
 sound: sound/libfmodstudio.so
 
-sound/libfmodstudio.so: ../otherlibs/fmodstudioapi/.timestamp
+sound/libfmodstudio.so: ../otherlibs/fmodstudioapi/.timestamp reaper.c
 	mkdir -p sound
 	./make-fmodstudio-shim.sh
 
