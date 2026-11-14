@@ -33,8 +33,9 @@ else
     echo "warning: no Steamworks.NET.dll in $GAME, skipping the Steam stub" >&2
 fi
 
-# 2. Everest splash helper ---------------------------------------------------
+# 2. Everest splash helper and "Celeste" executable ------------------------------
 bash "$HERE/fix-splash.sh" "$GAME"
+bash "$HERE/fix-launcher.sh" "$GAME"
 
 # 3. Lua (Everest needs liblua54.so; patch.sh only installs it through apt/dnf) -
 if [[ -e "$GAME/lib-fmod2/liblua54.so" ]]; then

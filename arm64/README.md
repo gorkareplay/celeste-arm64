@@ -23,6 +23,7 @@ stand-in below is what gets around it.
 | **Music fix** (`reaper`) | `fmod/reaper.c`, `fmod/make-fmodstudio-shim.sh`, `fmod/Makefile` | Under FMOD 2 a fade-out stop never finishes for some events (B-side remixes, cassette tracks, credits), so they keep playing and stack up. The shim now fades those out itself and stops them. |
 | **Steamworks.NET.dll** | `arm64/build-steamworks-net.sh` | The DLL shipped with the game is stamped x86-64-only and fails to load on aarch64. It is rebuilt from source as AnyCPU (`dotnet build ... -p:PlatformTarget=AnyCPU`). |
 | **Steam stand-in** | `arm64/make-steam-stub.sh` | Everest's Steamworks.NET calls `libsteam_api.so`, which does not exist for this setup. The stub is generated from the names the DLL imports. |
+| **`Celeste` executable** | `arm64/fix-launcher.sh` | Everest relaunches the game by running `Celeste` in the game folder, and its download ships an x86-64 one ("Exec format error", right after an Everest update). Replaced by a script that runs `dotnet Celeste.dll`. |
 | **Splash helper** | `arm64/fix-splash.sh` | Everest's loading splash is an x86-64 binary ("Exec format error"). Replaced by a no-op. |
 | **Lua / SDL2 on NixOS** | `arm64/install.sh` | `liblua54.so` is only installed through apt/dnf by upstream; the from-source SDL2 could not load Vulkan/X11/Wayland on NixOS, so nixpkgs' SDL2 is used. |
 | **Everest updater** | `arm64/update-everest.sh` | Everest's in-game updater runs `MiniInstaller-linux`, an x86-64 binary. The script downloads a build and runs `MiniInstaller.dll` through dotnet instead, then re-applies the fixes above. |
@@ -127,6 +128,7 @@ library path (`LD_LIBRARY_PATH=$(nix-build '<nixpkgs>' -A stdenv.cc.cc.lib --no-
 | `Could not load file or assembly 'Steamworks.NET, Version=2024.8.0.0'` | The shipped DLL is x86-64-only. Run `arm64/build-steamworks-net.sh <game dir> --force`. |
 | `Unable to load shared library 'steam_api'` | Run `arm64/install.sh` (builds the stub). |
 | `Exec format error` for `EverestSplash-linux` | Run `arm64/fix-splash.sh`. |
+| Exec format error for .../Celeste after “Restarting with LD_LIBRARY_PATH” | Run arm64/fix-launcher.sh <game dir> (an Everest update restores the x86-64 file). |
 | `SDL_Vulkan_LoadLibrary failed!` / `No supported FNA3D driver found!` | Use nixpkgs' SDL2 (`install.sh` does this on NixOS). |
 | `libstdc++.so.6: cannot open shared object file` (test program only) | Add libstdc++ to `LD_LIBRARY_PATH`, see above. |
 | Music from B/C sides keeps playing after leaving the map | The music fix is not in the shim you are running; rebuild with `make -C fmod sound`. |
